@@ -9,7 +9,7 @@ class Counter extends Component {
       title: "",
       description: "",
       price: "",
-      registerClicked: false
+      dataTosend: []
     };
   }
 
@@ -19,74 +19,111 @@ class Counter extends Component {
 
   handleFormSubmit(e) {
     e.preventDefault();
-    localStorage.setItem("document", JSON.stringify(this.state));
+    let value = {
+      title: this.state.title,
+      description: this.state.description,
+      price: this.state.price
+    };
+    // this.state.array.push(value);
+    let datatosend = this.state.dataTosend;
+    datatosend.push(value);
+    this.setState({
+      dataTosend: datatosend
+    });
+    console.log("array", datatosend);
+    localStorage.setItem("document", JSON.stringify(datatosend));
     this.setState({ registerClicked: true });
-  }
-  componentDidUpdate() {
-    // console.log("working");
-    this.documentData = JSON.parse(localStorage.getItem("document"));
-
-    if (this.state.registerClicked && localStorage.getItem("document")) {
-      this.setState({
-        submittedtitle: this.documentData.title,
-        submitteddescription: this.documentData.description,
-        submittedprice: this.documentData.price,
-        registerClicked: false,
-        title: "",
-        price: "",
-        description: ""
-      });
-      console.log(this.documentData.title);
-    }
   }
 
   render() {
     return (
-      <div className="container">
-        <div style={{width:"30%", border: '1px solid red',height:"350px",marginLeft:"350px",marginTop:"50px"}}>
-        <form onSubmit={this.handleFormSubmit}>
-          <div className="form-group" style={{width:"250px",marginLeft:"40px"}}>
-            <label>Title</label>
-            <input
-              type="text"
-              name="title"
-              className="form-control"
-              value={this.state.title}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-group" style={{width:"250px",marginLeft:"40px"}}>
-            <label>Description</label>
-            <input
-              type="text"
-              name="description"
-              className="form-control"
-              value={this.state.description}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-group" style={{width:"250px",marginLeft:"40px"}}>
-            <label>Price</label>
-            <input
-              type="number"
-              name="price"
-              className="form-control"
-              value={this.state.price}
-              onChange={this.handleChange}
-            />
-          </div>
-          <button type="submit" className="btn btn-primary btn-block" style={{width:"250px",marginLeft:"40px",marginTop:"45px"}}>
-            Submit
-          </button>
-        </form>
+      <div className="container  col-10 col-md-5 align-items-center flex-column h-100 justify-content-center">
+        <div
+          style={{
+            width: "",
+            border: "1px solid red",
+            height: "fit-content",
+            marginTop: "120px"
+          }}
+        >
+          {" "}
+          <h2 className="font-weight-bold text-center mt-4 text-primary">
+            Form
+          </h2>
+          <form
+            onSubmit={this.handleFormSubmit}
+            className="d-flex flex-column justify-content-center align-items-center p-3"
+          >
+            <div
+              className="form-group"
+              style={{
+                width: "100%",
+                paddingLeft: "40px",
+                paddingRight: "40px"
+              }}
+            >
+              <label>Title</label>
+              <input
+                type="text"
+                name="title"
+                className="form-control"
+                onChange={this.handleChange}
+              />
+            </div>
+            <div
+              className="form-group"
+              style={{
+                width: "100%",
+                paddingLeft: "40px",
+                paddingRight: "40px"
+              }}
+            >
+              <label>Description</label>
+              <input
+                type="text"
+                name="description"
+                className="form-control"
+                onChange={this.handleChange}
+              />
+            </div>
+            <div
+              className="form-group"
+              style={{
+                width: "100%",
+                paddingLeft: "40px",
+                paddingRight: "40px"
+              }}
+            >
+              <label>Price</label>
+              <input
+                type="number"
+                name="price"
+                className="form-control"
+                onChange={this.handleChange}
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn btn-primary btn-block"
+              style={{ width: "250px", marginTop: "15px" }}
+            >
+              Submit
+            </button>
+          </form>
         </div>
 
-        <div style={{marginLeft:"470px",marginTop:"60px"}} >
-        
-        <div>{this.state.submittedtitle}</div>
-        <div>{this.state.submitteddescription}</div>
-        <div>{this.state.submittedprice}</div>
-        
+        <div style={{ marginLeft: "470px", marginTop: "60px" }}>
+          {this.state.dataTosend}
+          {this.state.dataTosend.map(data => (
+            <div className="d-flex ">
+              <div>{data.title}, </div>
+              <div>{data.description}, </div>
+              <div>{data.price} </div>
+            </div>
+          ))}
+          {/* <div>{this.state.submittedtitle}</div>
+          <div>{this.state.submitteddescription}</div>
+          <div>{this.state.submittedprice}</div> */}
         </div>
       </div>
     );
