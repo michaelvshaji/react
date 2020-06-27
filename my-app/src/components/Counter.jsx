@@ -9,9 +9,13 @@ class Counter extends Component {
       title: "",
       description: "",
       price: "",
-      dataTosend: []
+      dataTosend: [],
+      registerClicked: true
     };
   }
+  componentDidMount() {
+    localStorage.setItem('lists', JSON.stringify(this.state.dataTosend))
+   }
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -24,18 +28,24 @@ class Counter extends Component {
       description: this.state.description,
       price: this.state.price
     };
-    // this.state.array.push(value);
+    
     let datatosend = this.state.dataTosend;
     datatosend.push(value);
     this.setState({
-      dataTosend: datatosend
+      dataTosend: datatosend,
+      registerClicked: true
     });
-    console.log("array", datatosend);
-    localStorage.setItem("document", JSON.stringify(datatosend));
+    localStorage.setItem("lists", JSON.stringify(this.state.dataTosend));
     this.setState({ registerClicked: true });
   }
 
   render() {
+    if(this.state.registerClicked){
+      this.documentData = JSON.parse(localStorage.getItem('lists'))
+      this.setState({
+        registerClicked: false
+      })
+    }
     return (
       <div className="container  col-10 col-md-5 align-items-center flex-column h-100 justify-content-center">
         <div
@@ -112,18 +122,19 @@ class Counter extends Component {
           </form>
         </div>
 
-        <div style={{ marginLeft: "470px", marginTop: "60px" }}>
-          {this.state.dataTosend}
-          {this.state.dataTosend.map(data => (
+        <div
+          style={{ marginTop: "60px" }}
+          className="d-flex justify-content-center flex-column align-items-center"
+        >
+         
+          {this.documentData && this.documentData.map(data => (
             <div className="d-flex ">
               <div>{data.title}, </div>
               <div>{data.description}, </div>
               <div>{data.price} </div>
             </div>
           ))}
-          {/* <div>{this.state.submittedtitle}</div>
-          <div>{this.state.submitteddescription}</div>
-          <div>{this.state.submittedprice}</div> */}
+          
         </div>
       </div>
     );
